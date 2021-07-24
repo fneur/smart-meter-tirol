@@ -65,7 +65,7 @@ zudem an einem
 [*Konzept für einen Smart-Meter Kundenschnittstellen-Adapter zur Standardisierung der Datenbereitstellung in der Kundenanlage*](https://oesterreichsenergie.at/fileadmin/user_upload/Smart_Meter-Plattform/20200201_Konzept_Kundenschnittstelle_SM.pdf)
 gearbeitet, der mit allen österreichischen Smart Metern kompatibel sein soll. 
 
-# Datenmodell
+# Datenmodell und Datenübertragung
 
 Die nachfolgende Tabelle listet alle über die Kundenschnittstelle übertragenen Messwerte
 und sonstige relevante Daten auf:
@@ -91,31 +91,66 @@ OBIS-Code | Attribut
 
 \* Werte werden ausschließlich bei Drehstrom-Zählern ausgegeben.
 
+Diese Daten werden vom Zähler (ohne explizite Anforderung) im unidirektionalen
+Push-Betrieb im 5 Sekundentakt auf der Kundenschnittstelle ausgegeben.
+
 Weitere Details zur Datenübertragung, dem Datenmodell und der Datensicherheit
 werden in den folgenden Abschnitten angeführt.
 
-# Protokollstack und Frame-Struktur
+> Bei Bedarf können darüber hinausgehende Informationen in der aktuellen
+> [DLMS/COSEM Spezifikation](https://www.dlms.com/) (Green Book) nachgelesen werden,
+> vor allem in den Abschnitten 10.5.3 und 10.5.4.
+
+# Protokollstack
 
 Die technische Datenübertragung basiert auf einem Protokollstack auf Basis von
 M-Bus auf den unteren Protokollschichten in Kombination mit einer DLMS/COSEM
-Applikationsschicht.
+Applikationsschicht. Darüber werden die als COSEM-Objekte codierten Nutzdaten
+in verschlüsselter Form übertragen.
 
 ![Protokollstack](./doc/pics/Protokollstack.png)
 
+Protokollschicht | Detailbeschreibung zu finden in (Spezifikation/Standard/Norm)
+---------------- | -------------------------------------------------------------
+DLMS/COSEM Application Layer | [DLMS/COSEM Spezifikation](https://www.dlms.com/) (Green Book, Kapitel 9) bzw. IEC 62056-5-3
+DLMS/COSEM M-Bus Transport Layer | EN 13757-3 (M-Bus Transport Layer) und Green Book 10.5.4.6 (M-Bus wrapper)
+M-Bus Data Link Layer | EN 13757-2
+M-Bus Physical Layer | EN 13757-2
 
 # Datensicherheit
 
-# To-do
+## todo
 
-Protokoll-Stack: ergänze COSEM Datenmodell in Bild (analog GB 8.0 Seite 375)
+Wie eingangs bereits erwähnt, ...
+
+Um Unberechtigten den Zugriff auf die Daten nicht zu ermöglichen, ist die
+Kommunikation über diese Schnittstelle nach dem Stand der Technik mit einem
+individuellen kundenbezogenen Schlüssel zu authentisieren und zu verschlüsseln.
+
+Security Standard:
+Verschl. findet in der Appl.schicht statt
+Security Suite: DLMS/COSEMSecurity Suite 1
+Verschlüsselungsalgorithmus: AES128-GCM
+Key: Global Unicast Encryption Key
+
+Wie kommt der Kunde zum Schlüssel?
+
+# Frame-Struktur
 
 Ziel der Beschreibung ist die Interpretation des ausgelesenen Byte-Streams (Entschlüsselung und Dekodierung der Nutzdaten);
 
-Beim Protokollstack - Verw. auf Spezif. und/oder Normen - s. GreenBook Übersichtsgraphik
-alle notwendigen PHY - Parameter angeben: bd rate etc. cf. also https://m-bus.com/documentation-wired/05-data-link-layer
+![Frame-Struktur](./doc/pics/Frame_Struktur.png)
 
+
+
+# To-do
+
+Protokoll-Stack:
+  ergänze COSEM Datenmodell in Bild (analog GB 8.0 Seite 375)
+  alle notwendigen PHY - Parameter angeben: bd rate etc.
+    cf. also https://m-bus.com/documentation-wired/05-data-link-layer
 
 Felder erklären: welche sind statisch, welche dyn?
 Fragmentierung erklären
 Ver- und Entschlüsselung erklären, encr. only no auth., wie kommt man zum Schlüssel
-Besipiel mit Walkthrough
+Beispiel mit Walkthrough
