@@ -138,22 +138,40 @@ Netzbetreiber TINETZ beispielsweise unter
 
 # Physikalische Datenübertragung und logische Frame-Struktur
 
-Ziel der Beschreibung ist die Interpretation des ausgelesenen Byte-Streams (Entschlüsselung und Dekodierung der Nutzdaten)
+## Physikalische Datenübertragung - M-Bus (drahtgebunden)
 
-## Physikalische Datenübertragung
+![RJ12](./doc/pics/rj12.png)
 
-alle notwendigen PHY - Parameter angeben: bd rate etc.
-    cf. also https://m-bus.com/documentation-wired/05-data-link-layer
+**Anschluss**: RJ 12 Modular Jack 6P6C
+
+Pin-Nr. | Belegung
+------- | -------- 
+1 | nicht verwendet
+2 | nicht verwendet
+3 | MBUS1 (+)
+4 | MBUS2 (-)
+5 | nicht verwendet
+6 | nicht verwendet
+
+**Konfiguration**: M-Bus Master (drahtgebunden)
+
+**Übertragungsparameter**: Baud-Rate 2.400; 1 Startbit, 8 Datenbits, 1 Paritätsbit
+(gerade Parität) und 1 Stoppbit
+
+**Stromversorgung**: via M-Bus; 4 M-Bus-Loads mit insgesamt 6mA und 32V 
 
 ## Logische Frame-Struktur
 
+Ziel der Beschreibung ist die Interpretation des ausgelesenen Byte-Streams
+(Entschlüsselung und Dekodierung der Nutzdaten)
+
 ![Frame-Struktur](./doc/pics/Frame_Struktur.png)
 
-# To-do
-
-Protokoll-Stack: ergänze COSEM Datenmodell in Bild (analog GB 8.0 Seite 375)
-
+# Dummy
 Felder erklären: welche sind statisch, welche dyn?
 Fragmentierung erklären
 Ver- und Entschlüsselung erklären, encr. only no auth.
 Beispiel mit Walkthrough
+
+# To-do
+Protokoll-Stack: ergänze COSEM Datenmodell in Bild (analog GB 8.0 Seite 375)
