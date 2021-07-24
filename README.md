@@ -12,6 +12,7 @@ Steuerung des Zählers ist nicht vorgesehen.
 Um Unberechtigten den Zugriff auf die Daten nicht zu ermöglichen, ist die
 Kommunikation über diese Schnittstelle nach dem Stand der Technik mit einem
 individuellen kundenbezogenen Schlüssel zu authentisieren und zu verschlüsseln.
+Außerdem ist die Schnittstelle standardmäßig deaktiviert.
 
 Ziel der nachfolgenden Abschnitte ist es zu beschreiben, wie berechtigte Personen
 (Kunden) die Daten aus ihren Zählern auslesen können.
@@ -119,38 +120,40 @@ M-Bus Physical Layer | EN 13757-2
 
 # Datensicherheit
 
-## todo
+Wie eingangs bereits erwähnt, ist die Kommunikation über die Kundenschnittstelle
+nach dem Stand der Technik mit einem individuellen kundenbezogenen Schlüssel zu
+authentisieren und zu verschlüsseln, um Unberechtigten den Zugriff auf die Daten
+nicht zu ermöglichen. Dazu einige markante Eckpunkte:
 
-Wie eingangs bereits erwähnt, ...
+- Die Verschlüsselung findet in der Applikationsschicht statt (nicht in der Transportschicht).
+- Verwendeter Sicherheitsstandard: DLMS/COSEM Security Suite 1
+- Verschlüsselungsalgorithmus: AES-GCM (Advanced Encryption Standard - Galois/Counter Mode)
+- Schlüssellänge: 128 bits
 
-Um Unberechtigten den Zugriff auf die Daten nicht zu ermöglichen, ist die
-Kommunikation über diese Schnittstelle nach dem Stand der Technik mit einem
-individuellen kundenbezogenen Schlüssel zu authentisieren und zu verschlüsseln.
+Um die Kundenschnittstelle zu aktivieren und den notwendigen, kundenindividuellen Schlüssel
+zu erhalten, wendet man sich entweder direkt an seinen Netzbetreiber oder beantragt die
+Aktivierung und Zusendung des Schlüssels online im Kundenportal des Netzbetreibers; für den
+Netzbetreiber TINETZ beispielsweise unter
+[kundenportal.tinetz.at](https://kundenportal.tinetz.at/).  
 
-Security Standard:
-Verschl. findet in der Appl.schicht statt
-Security Suite: DLMS/COSEMSecurity Suite 1
-Verschlüsselungsalgorithmus: AES128-GCM
-Key: Global Unicast Encryption Key
+# Physikalische Datenübertragung und logische Frame-Struktur
 
-Wie kommt der Kunde zum Schlüssel?
+Ziel der Beschreibung ist die Interpretation des ausgelesenen Byte-Streams (Entschlüsselung und Dekodierung der Nutzdaten)
 
-# Frame-Struktur
+## Physikalische Datenübertragung
 
-Ziel der Beschreibung ist die Interpretation des ausgelesenen Byte-Streams (Entschlüsselung und Dekodierung der Nutzdaten);
+alle notwendigen PHY - Parameter angeben: bd rate etc.
+    cf. also https://m-bus.com/documentation-wired/05-data-link-layer
+
+## Logische Frame-Struktur
 
 ![Frame-Struktur](./doc/pics/Frame_Struktur.png)
 
-
-
 # To-do
 
-Protokoll-Stack:
-  ergänze COSEM Datenmodell in Bild (analog GB 8.0 Seite 375)
-  alle notwendigen PHY - Parameter angeben: bd rate etc.
-    cf. also https://m-bus.com/documentation-wired/05-data-link-layer
+Protokoll-Stack: ergänze COSEM Datenmodell in Bild (analog GB 8.0 Seite 375)
 
 Felder erklären: welche sind statisch, welche dyn?
 Fragmentierung erklären
-Ver- und Entschlüsselung erklären, encr. only no auth., wie kommt man zum Schlüssel
+Ver- und Entschlüsselung erklären, encr. only no auth.
 Beispiel mit Walkthrough
