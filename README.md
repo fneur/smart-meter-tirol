@@ -113,6 +113,7 @@ in verschlüsselter Form übertragen.
 
 Protokollschicht | Detailbeschreibung zu finden in (Spezifikation/Standard/Norm)
 ---------------- | -------------------------------------------------------------
+COSEM Data Model | [DLMS/COSEM Spezifikation](https://www.dlms.com/) (Blue Book) bzw. IEC 62056-6-1, IEC 62056-6-2
 DLMS/COSEM Application Layer | [DLMS/COSEM Spezifikation](https://www.dlms.com/) (Green Book, Kapitel 9) bzw. IEC 62056-5-3
 DLMS/COSEM M-Bus Transport Layer | EN 13757-3 (M-Bus Transport Layer) und Green Book 10.5.4.6 (M-Bus wrapper)
 M-Bus Data Link Layer | EN 13757-2
@@ -162,16 +163,41 @@ Pin-Nr. | Belegung
 
 ## Logische Frame-Struktur
 
-Ziel der Beschreibung ist die Interpretation des ausgelesenen Byte-Streams
-(Entschlüsselung und Dekodierung der Nutzdaten)
+Zur leichteren Interpretation der über die physikalische Schnittstelle übertragenen bzw.
+empfangenen Byte-Sequenzen ist der Aufbau der Nachrichten, die logische Frame-Struktur,
+in der nachfolgenden Abbildung dargestellt. Mit diesen Informationen kann die
+Entschlüsselung und Dekodierung der Nutzdaten nachvollzogen bzw. durchgeführt werden.
 
 ![Frame-Struktur](./doc/pics/Frame_Struktur.png)
 
-# Dummy
-Felder erklären: welche sind statisch, welche dyn?
-Fragmentierung erklären
-Ver- und Entschlüsselung erklären, encr. only no auth.
-Beispiel mit Walkthrough
+Feld | Protokollschicht | Beschreibung | Länge [bytes] | statisch | Wert [hexadezimal]
+-----|------------------|--------------|----------------|----------|-------------------
+Start Character | Data Link Layer | Beginn des M-Bus Frames | 1 | ja | 68h
+L Field | Data Link Layer | Frame-Länge | 1 | nein | Anzahl an bytes zwischen 2. Start Character und Checksum-Feld (= 2 + Transport Layer Length + Application Layer Length)
+C Field | Data Link Layer | Control-Feld (Datenflussrichtung, Frametyp etc.) | 1 | nein | 53h/73h (SND_UD, SEND UserData von Master zu Slaves)
+A Field | Data Link Layer | Adress-Feld (Empfänger) | 1 | ja | FFh (Broadcast-Adresse)
+CI Field | Transport Layer | Control-Information-Feld todo cf. GreenBook | 1 | nein | todo 10h = TPDU with no M-Bus Data Header, Data without segmentation (Data with segmentation, last segment)
+STSAP | Transport Layer | Source Transport Service Access Point | 1 | ja | 01h (Management Logical Device ID 1)
+DTSAP | Transport Layer | Destination Transport Service Access Point | 1 | ja | 67h (Consumer Information Push Client ID 103)
+Data | Application Layer | Verschlüsselte Nutzdaten (DLMS) | max. 250 | nein |
+Checksum | Data Link Layer | Prüfsumme zur Fehlererkennung | 1??? | nein |
+Stop Character | Data Link Layer | Ende des M-Bus Frames | 1 | ja | 16h
+
+![CI Field](./doc/pics/CI.png)
 
 # To-do
-Protokoll-Stack: ergänze COSEM Datenmodell in Bild (analog GB 8.0 Seite 375)
+Struktur der xDLMS APDU separat erklären in Kombination mit Fragmentierung
+
+Ciphering Service | Application Layer | Kennung des Verschlüsselungsmechanismus | 1 | ja | DBh (general-glo-ciphering)
+System Title Length | Application Layer | Länge des nachfolgenden System Title in bytes | 1 | ja | 08h
+System Title | Application Layer | Eindeutige ID des Zählers (Zeichenkette) | 8 | ja | individuell je Zähler
+Length | Application Layer | todo | ??? fix oder variabel? | ??? |
+Security Control Byte | Application Layer | todo | ??? | ??? |
+Frame Counter | Application Layer | Nachrichtenzähler | ??? | ??? |
+Encrypted Payload | Application Layer | Verschlüsselte Nutzdaten | ??? | ??? |
+
+Ver- und Entschlüsselung xDLMS APDU erklären, encr. only no auth., key + IV, evtl. Bilder zu GCM-Verschl. aus GreenBook, evtl. Verweis auf Gurux und CyberChef
+Beispiel mit Walkthrough (s. MiC E-Mail und zugeh. Textfile)
+
+# To-do
+Bild von Zähler einfügen?
