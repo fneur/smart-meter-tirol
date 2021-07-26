@@ -186,12 +186,30 @@ Checksum | Data Link Layer | Prüfsumme zur Fehlererkennung | 1 | nein | Arithme
 Stop Character | Data Link Layer | Ende des M-Bus Frames | 1 | ja | 16h
 
 ## Struktur der verschlüsselten Nutzdaten (Encrypted DLMS Payload)
-todo
-Struktur der xDLMS APDU separat erklären in Kombination mit Fragmentierung/Segmentierung
+
+Wie oben beschrieben, können in einem einzelnen M-Bus Frame maximal 250 bytes
+an (DLMS-)Nutzdaten transportiert werden. Größere DLMS-Nachrichten müssen daher
+vor dem Versand in mehrere Teile (<=250 bytes) zerlegt werden (Segmentierung) und
+in separaten M-Bus Frames verschickt werden. Der Empfänger muss die verschiedenen
+Teile aus den M-Bus Frames extrahieren und wieder zu einer einzelnen DLMS-Nachricht
+zusammenfügen (Reassemblierung).
+
+Gesteuert wird dieser Prozess über das Control-Information-Feld.
 
 **Control-Information-Feld**
 
 ![CI Field](./doc/pics/CI_bits.png)
+
+- Bits 7, 6 und 5 gleich 0 zeigen an, dass kein separater M-Bus Datenheader präsent ist.
+- Bit 4 (FIN) gleich 0 zeigt an, dass Segmentierung aktiv ist, es sich aber nicht um das
+letzte übertragene Segment handelt.
+- Bit 4 (FIN) gleich 1 markiert das letzte Segment bzw. das einzige Segment bei inaktiver
+Segmentierung.
+- Bits 3 bis 0 repräsentieren die jeweilige Segmentnummer.
+
+> **Bsp.:** Für eine DLMS-Nachricht <=250 bytes ist CI=0x10. Bei einer DLMS-Nachricht, die in
+> Form von 2 Segmenten übertragen werden muss, ist CI=0x00 für das 1. Segment und CI=0x11
+> für das 2. Segment.
 
 **Aufbau der DLMS-Nachricht**
 
@@ -207,8 +225,9 @@ Security Control Byte | Application Layer | todo | ??? | ??? |
 Frame Counter | Application Layer | Nachrichtenzähler | ??? | ??? |
 Encrypted Payload | Application Layer | Verschlüsselte Nutzdaten | ??? | ??? |
 
-## Datenverschlüsselung / Datenentschlüsselung
+## Datenverschlüsselung / Datenentschlüsselung / Dekodierung
 
 Ver- und Entschlüsselung xDLMS APDU erklären, encr. only no auth., key + IV, evtl. Bilder zu GCM-Verschl. aus GreenBook, evtl. Verweis auf Gurux und CyberChef
+
 Todo
 Beispiel mit Walkthrough (s. MiC E-Mail und zugeh. Textfile)
