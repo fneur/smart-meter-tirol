@@ -221,13 +221,26 @@ Ciphering Service | Application Layer | Kennung des Verschlüsselungsmechanismus
 System Title Length | Application Layer | Länge des nachfolgenden System Title in bytes | 1 | ja | 08h
 System Title | Application Layer | Eindeutige ID des Zählers (Zeichenkette) | 8 | ja | individuell je Zähler
 Length | Application Layer | Nachrichtenlänge (Security Control Byte, Frame Counter, Encrypted Payload) | variabel | nein | Anzahl an bytes nach dem Length Feld (= 5 + Encrypted Payload Length); codiert als 1 byte für Nachrichtenlänge <=127, andernfalls als 2 bytes mit Präfix 82h; z.B., 820109h für Nachrichtenlänge = 0109h = 265
-Security Control Byte | Application Layer | Security Control Byte | 1 | ja | 21h (Bits 3 bis 0: Security_Suite_Id; Bit 4: “A” subfield: indicates that authentication is applied; Bit 5: “E” subfield: indicates that encryption is applied; Bit 6: Key_Set subfield: 0 = Unicast, 1 = Broadcast; Bit 7: Indicates the use of compression)
+Security Control Byte | Application Layer | Security Control Byte - Einstellung von Sicherheitsparametern | 1 | ja | 21h (Bits 3 bis 0: Security_Suite_Id; Bit 4: “A” subfield: indicates that authentication is applied; Bit 5: “E” subfield: indicates that encryption is applied; Bit 6: Key_Set subfield: 0 = Unicast, 1 = Broadcast; Bit 7: Indicates the use of compression)
 Frame Counter | Application Layer | Nachrichtenzähler | 4 | nein |
 Encrypted Payload | Application Layer | Verschlüsselte Nutzdaten | variabel | nein |
 
 ## Datenverschlüsselung / Datenentschlüsselung / Dekodierung
 
-Ver- und Entschlüsselung xDLMS APDU erklären, encr. only no auth., key + IV, evtl. Bilder zu GCM-Verschl. aus GreenBook, evtl. Verweis auf Gurux und CyberChef
+Wie bereits erwähnt und auch aus dem Security Control Byte ersichtlich, wird als
+Sicherheitsstandard die DLMS/COSEM Security Suite 1 verwendet. Bezüglich Ver- und
+Entschlüsselung der Daten sind folgende Informationen maßgeblich:
+
+- Verschlüsselungsalgorithmus: AES-GCM (Advanced Encryption Standard - Galois/Counter Mode)
+- Schlüssellänge: 128 bits (wie oben schon erwähnt, ist der Schlüssel beim Netzbetreiber
+zu beziehen)
+- Initialisierungsvektor (IV): 96 bits, IV = System Title + Frame Counter (Verkettung von
+System Title und Frame Counter)
+
+Für die Interpretation der entschlüsselten (als COSEM-Objekte codierten) Daten kann auf
+im Internet frei verfügbare Open-Source-Bibliotheken und Tools zurückgegriffen werden,
+beispielsweise auf den [GuruxDLMSTranslator](https://www.gurux.fi/GuruxDLMSTranslatorInfo/).
 
 Todo
-Beispiel mit Walkthrough (s. MiC E-Mail und zugeh. Textfile)
+Beispiel mit Walkthrough (s. MiC E-Mail und zugeh. Textfile, EVN)
+Ver- und Entschlüsselung xDLMS APDU erklären, encr. only - no auth., evtl. Bilder zu GCM-Verschl. aus GreenBook,
