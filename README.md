@@ -220,10 +220,10 @@ Feld | Protokollschicht | Beschreibung | Länge [bytes] | statisch | Wert [hexad
 Ciphering Service | Application Layer | Kennung des Verschlüsselungsmechanismus | 1 | ja | DBh (general-glo-ciphering)
 System Title Length | Application Layer | Länge des nachfolgenden System Title in bytes | 1 | ja | 08h
 System Title | Application Layer | Eindeutige ID des Zählers (Zeichenkette) | 8 | ja | individuell je Zähler
-Length | Application Layer | todo | ??? fix oder variabel? | ??? | 820109 10000010 00000001 00001001 encodes a 2 byte Integer 00000001 00001001 = 256 + 9 = 265
-Security Control Byte | Application Layer | todo | ??? | ??? |
-Frame Counter | Application Layer | Nachrichtenzähler | ??? | ??? |
-Encrypted Payload | Application Layer | Verschlüsselte Nutzdaten | ??? | ??? |
+Length | Application Layer | Nachrichtenlänge (Security Control Byte, Frame Counter, Encrypted Payload) | variabel | nein | Anzahl an bytes nach dem Length Feld (= 5 + Encrypted Payload Length); codiert als 1 byte für Nachrichtenlänge <=127, andernfalls als 2 bytes mit Präfix 82h; z.B., 820109h für Nachrichtenlänge = 0109h = 265
+Security Control Byte | Application Layer | Security Control Byte | 1 | ja | 21h (Bits 3 bis 0: Security_Suite_Id; Bit 4: “A” subfield: indicates that authentication is applied; Bit 5: “E” subfield: indicates that encryption is applied; Bit 6: Key_Set subfield: 0 = Unicast, 1 = Broadcast; Bit 7: Indicates the use of compression)
+Frame Counter | Application Layer | Nachrichtenzähler | 4 | nein |
+Encrypted Payload | Application Layer | Verschlüsselte Nutzdaten | variabel | nein |
 
 ## Datenverschlüsselung / Datenentschlüsselung / Dekodierung
 
