@@ -28,6 +28,8 @@ Gerätetypen der Hersteller Kaifa und Honeywell.
 von den Netzbetreibern [Salzburg Netz GmbH](https://www.salzburgnetz.at/) und
 [Vorarlberger Energienetze GmbH](https://www.vorarlbergnetz.at/) verwendet.)
 
+![Kaifa MA309](./doc/pics/KaifaMA309.png)
+
 # Typisches Setup für die Datenauslesung
 
 Aufgrund der Tatsache, dass es sich bei den im Zusammenhang mit der Kundenschnittstelle
@@ -176,28 +178,37 @@ Start Character | Data Link Layer | Beginn des M-Bus Frames | 1 | ja | 68h
 L Field | Data Link Layer | Frame-Länge | 1 | nein | Anzahl an bytes zwischen 2. Start Character und Checksum-Feld (= 2 + Transport Layer Length + Application Layer Length)
 C Field | Data Link Layer | Control-Feld (Datenflussrichtung, Frametyp etc.) | 1 | nein | 53h/73h (SND_UD, SEND UserData von Master zu Slaves)
 A Field | Data Link Layer | Adress-Feld (Empfänger) | 1 | ja | FFh (Broadcast-Adresse)
-CI Field | Transport Layer | Control-Information-Feld todo cf. GreenBook | 1 | nein | todo 10h = TPDU with no M-Bus Data Header, Data without segmentation (Data with segmentation, last segment)
-STSAP | Transport Layer | Source Transport Service Access Point | 1 | ja | 01h (Management Logical Device ID 1)
+CI Field | Transport Layer | Control-Information-Feld (Struktur der nachfolgenden Transport- und Applikationsschichtdaten, Details siehe unten) | 1 | nein | 00h - 1Fh
+STSAP | Transport Layer | Source Transport Service Access Point | 1 | ja | 01h (Management Logical Device ID 1 des Zählers)
 DTSAP | Transport Layer | Destination Transport Service Access Point | 1 | ja | 67h (Consumer Information Push Client ID 103)
-Data | Application Layer | Verschlüsselte Nutzdaten (DLMS) | max. 250 | nein |
-Checksum | Data Link Layer | Prüfsumme zur Fehlererkennung | 1??? | nein |
+Data | Application Layer | Verschlüsselte Nutzdaten (DLMS, Details siehe unten) | max. 250 | nein |
+Checksum | Data Link Layer | Prüfsumme zur Fehlererkennung | 1 | nein | Arithmetische Summe der bytes zwischen 2. Start Character und Checksum-Feld ohne Berücksichtigung etwaiger Überträge
 Stop Character | Data Link Layer | Ende des M-Bus Frames | 1 | ja | 16h
 
-![CI Field](./doc/pics/CI.png)
+## Struktur der verschlüsselten Nutzdaten (Encrypted DLMS Payload)
+todo
+Struktur der xDLMS APDU separat erklären in Kombination mit Fragmentierung/Segmentierung
 
-# To-do
-Struktur der xDLMS APDU separat erklären in Kombination mit Fragmentierung
+**Control-Information-Feld**
 
+![CI Field](./doc/pics/CI_bits.png)
+
+**Aufbau der DLMS-Nachricht**
+
+![DLMS Struktur](./doc/pics/DLMS_Struktur.png)
+
+Feld | Protokollschicht | Beschreibung | Länge [bytes] | statisch | Wert [hexadezimal]
+-----|------------------|--------------|----------------|----------|-------------------
 Ciphering Service | Application Layer | Kennung des Verschlüsselungsmechanismus | 1 | ja | DBh (general-glo-ciphering)
 System Title Length | Application Layer | Länge des nachfolgenden System Title in bytes | 1 | ja | 08h
 System Title | Application Layer | Eindeutige ID des Zählers (Zeichenkette) | 8 | ja | individuell je Zähler
-Length | Application Layer | todo | ??? fix oder variabel? | ??? |
+Length | Application Layer | todo | ??? fix oder variabel? | ??? | 820109 10000010 00000001 00001001 encodes a 2 byte Integer 00000001 00001001 = 256 + 9 = 265
 Security Control Byte | Application Layer | todo | ??? | ??? |
 Frame Counter | Application Layer | Nachrichtenzähler | ??? | ??? |
 Encrypted Payload | Application Layer | Verschlüsselte Nutzdaten | ??? | ??? |
 
-Ver- und Entschlüsselung xDLMS APDU erklären, encr. only no auth., key + IV, evtl. Bilder zu GCM-Verschl. aus GreenBook, evtl. Verweis auf Gurux und CyberChef
-Beispiel mit Walkthrough (s. MiC E-Mail und zugeh. Textfile)
+## Datenverschlüsselung / Datenentschlüsselung
 
-# To-do
-Bild von Zähler einfügen?
+Ver- und Entschlüsselung xDLMS APDU erklären, encr. only no auth., key + IV, evtl. Bilder zu GCM-Verschl. aus GreenBook, evtl. Verweis auf Gurux und CyberChef
+Todo
+Beispiel mit Walkthrough (s. MiC E-Mail und zugeh. Textfile)
