@@ -241,6 +241,5 @@ Für die Interpretation der entschlüsselten (als COSEM-Objekte codierten) Daten
 im Internet frei verfügbare Open-Source-Bibliotheken und Tools zurückgegriffen werden,
 beispielsweise auf den [GuruxDLMSTranslator](https://www.gurux.fi/GuruxDLMSTranslatorInfo/).
 
-Todo
-Beispiel mit Walkthrough (s. MiC E-Mail und zugeh. Textfile, EVN)
-Ver- und Entschlüsselung xDLMS APDU erklären, encr. only - no auth., evtl. Bilder zu GCM-Verschl. aus GreenBook,
+Ein erläuterndes praktisches Beispiel samt Walkthrough kann hier eingesehen werden:
+[EXAMPLE.md](./doc/EXAMPLE.md)
