@@ -161,7 +161,7 @@ Pin-Nr. | Belegung
 **Übertragungsparameter**: Baud-Rate 2.400; 1 Startbit, 8 Datenbits, 1 Paritätsbit
 (gerade Parität) und 1 Stoppbit
 
-**Stromversorgung**: via M-Bus; 4 M-Bus-Loads mit insgesamt 6mA und 32V 
+**Stromversorgung**: via M-Bus; max. 4 M-Bus-Loads mit insgesamt 6mA und 32V 
 
 ## Logische Frame-Struktur
 
@@ -240,6 +240,8 @@ System Title und Frame Counter)
 Für die Interpretation der entschlüsselten (als COSEM-Objekte codierten) Daten kann auf
 im Internet frei verfügbare Open-Source-Bibliotheken und Tools zurückgegriffen werden,
 beispielsweise auf den [GuruxDLMSTranslator](https://www.gurux.fi/GuruxDLMSTranslatorInfo/).
+
+## Beispiel
 
 Ein erläuterndes praktisches Beispiel samt Walkthrough kann hier eingesehen werden:
 [EXAMPLE.md](./doc/EXAMPLE.md)
