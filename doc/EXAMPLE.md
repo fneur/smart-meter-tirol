@@ -109,15 +109,29 @@ durchzuführen und das Resultat anzuzeigen
 
     ![DLMS/COSEM Nachricht](./pics/Gurux_Translator_result.png)
 
-## Alternative
+## Alternative - CyberChef
 
-Alternativ dazu kann die Entschlüsselung z.B. auch mit dem Online-Tool CyberChef vorgenommen werden.
-Dazu darf aber im Input-Feld nicht die gesamte DLMS/COSEM Nachricht eingegeben werden, sondern nur
-die verschlüsselte Payload (beginnend nach dem Header, am Ende des Frame-Counter; im Bsp. beginnt
-die verschlüsselte Payload mit der Byte-Sequenz EFC1546...).
+Alternativ kann die Datenentschlüsselung beispielsweise auch mit dem vielseitigen Online-Tool
+[CyberChef](https://gchq.github.io/CyberChef/) vorgenommen werden.
+Dabei ist allerdings darauf zu achten, dass im Input-Feld nicht die gesamte DLMS/COSEM
+Nachricht eingegeben wird, sondern nur die verschlüsselte Payload (beginnend nach dem
+Frame Counter).
 
+Unter nachfolgendem Link kann das betrachtete Beispiel (mit vollständig
+ausgefüllten Eingabefeldern) in CyberChef inspiziert werden:
 [CyberChef-Beispiel](https://gchq.github.io/CyberChef/#recipe=AES_Encrypt(%7B'option':'Hex','string':'101112131415161718191A1B1C1D1E1F'%7D,%7B'option':'Hex','string':'4B464D101000002300295B9A'%7D,'GCM','Hex','Hex',%7B'option':'Hex','string':''%7D)&input=RUZDMTU0NkU2NDRBMkM5RTMyRURENDJDQkQwRjFCOTQ1QjE5NEQwODY4ODVDNEQ4REY4NkRENTJDQjVCNDQ4ODU0QTZENTQ4RDVEMjcwNzM5QjJBMTY5RDA1QjAxM0Y5MDE1MDcwMDg5RDNDNUZBNDVDQTA1RTkyMzA5QTY0NUNDODNEN0RBNDBGQkM4RjRDRjlDMjI1QUZBNjlBMjVGRjBCMkFDOUMyNzQ0NTUwQUJBNTNDRTkxNDNGRDEwQjBBRDg1RkQzMEJENkI2REZGRUU2NUY4MjA0REM5QzUwNjdDQTczQjYyRTI5OUEzOUQ1MEFBNzMwQjJCOUFFMzgzNkJDMkYzNDkwRkI0MUJFNUI2RjkzMEQ4NDk1Mjk3NjM2OUREN0RBQkJCNUE0MzU0QUVDQTFEMjQ4NkNGRjJFQjBDNjIwNjM4MEJBNTAxRDEyMkFGNzVENzE2RDMwOTJDMzk2MDUwNkExNUUwNkZBQjBFRTVCN0RGQTNDMkNERjBDQUZEMDUxQjg4RTQ0QjhCOUZCODg2NUYyMENCODlEMTE0M0NEQzdFRkVCMDdGQjRDNDg5OEU3NjRFOUUzQTMyRERDM0QxRkI0Njk2MUNFOTYyQjJDNzgwNTBDOTY1OThDN0U0RDI2NjU4MDQzRjlDQkNBNzgxODlCRDAxQjEzOUY4QUUwRjczOQ)
 
-todo
-evtl. Gurux Python oder Java/C++ Beispiel auf Basis GXCiphering bzw. GXDLMSSecureClient
-s.a. EVN, Ver- und Entschlüsselung xDLMS APDU erklären, encr. only - no auth., evtl. Bilder zu GCM-Verschl. aus GreenBook
+Als Resultat erhält man im Output-Feld die folgende (nun entschlüsselte) Byte-Sequenz,
+in der die Nutzdaten als COSEM-Objekte codiert sind. Die Dekodierung kann (analog wie
+oben) mit dem Gurux DLMS Translator über die Schaltfläche `Pdu to XML`
+vorgenommen werden.
+
+    0f0029b2dc0c07e50713010f2e2300ff8880020c09060000010000ff090c07e5
+    0713010f2e2300ff8880020209060000600100ff090e314b464d303130303030
+    303033350202090600002a0000ff09104b464d31313030313030303030303335
+    020309060100200700ff12090402020fff16230203090601001f0700ff120000
+    02020ffe1621020309060100010700ff060000000002020f00161b0203090601
+    00020700ff060000000002020f00161b020309060100010800ff060000239402
+    020f00161e020309060100020800ff060000000002020f00161e020309060100
+    030800ff060000006002020f001620020309060100040800ff06000000090202
+    0f001620
