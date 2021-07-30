@@ -37,11 +37,11 @@ Nachricht transportieren. Beide haben die allgemeine Struktur
 
     68 L-Field L-Field 68 ... 16
 
-eines M-Bus Frames, aber eine unterschiedliche Länge (L-Field).
+eines M-Bus Frames, aber eine unterschiedliche Länge (L Field).
 In obiger Darstellung entspricht S_2 den letzten 3 Zeilen, während S_1 die
 restlichen Zeilen belegt. Gesteuert wird die Segmentierung über die jeweiligen
-Control-Information-Felder (CI). Bei einer DLMS-Nachricht, die aufgrund ihrer
-Größe in Form von 2 Segmenten übertragen werden muss, ist CI=0x00 für
+Control-Information-Felder (CI Field). Für eine DLMS/COSEM Nachricht, die aufgrund
+ihrer Größe in Form von 2 Segmenten übertragen werden muss, ist CI=0x00 für
 das 1. Segment und CI=0x11 für das 2. Segment.
 
 ## Segment 1
